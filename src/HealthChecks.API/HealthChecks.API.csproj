@@ -12,6 +12,9 @@
 
 	<ItemGroup>
 		<Folder Include="Controllers\" />
+		<Folder Include="DependencyInjection\" />
+		<Folder Include="Entities\" />
+		<Folder Include="Infra\" />
 	</ItemGroup>
 
 </Project>
