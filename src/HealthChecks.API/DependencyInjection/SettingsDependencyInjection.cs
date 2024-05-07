@@ -1,4 +1,5 @@
-﻿using HealthChecks.API.Filters;
+﻿using FluentValidation;
+using HealthChecks.API.Filters;
 using HealthChecks.API.Interfaces.Settings;
 using HealthChecks.API.Settings.NotificationSettings;
 
@@ -13,5 +14,7 @@ internal static class SettingsDependencyInjection
         services.AddScoped<NotificationFilter>();
 
         services.AddMvc(options => options.Filters.AddService<NotificationFilter>());
+
+        services.AddValidatorsFromAssembly(AssemblyReference.Assembly);
     }
 }
