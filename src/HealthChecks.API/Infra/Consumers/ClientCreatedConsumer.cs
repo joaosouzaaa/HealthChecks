@@ -7,7 +7,7 @@ namespace HealthChecks.API.Infra.Consumers;
 
 internal sealed class ClientCreatedConsumer(ConnectionFactory factory) : BackgroundService
 {
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
         var connection = factory.CreateConnection();
         var channel = connection.CreateModel();
@@ -28,5 +28,7 @@ internal sealed class ClientCreatedConsumer(ConnectionFactory factory) : Backgro
 
         channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
         channel.BasicConsume(queue: QueuesConstants.ClientCreatedQueue, consumer: consumer);
+
+        return Task.CompletedTask;
     }
 }
