@@ -7,6 +7,8 @@ internal static class DependencyInjectionHandler
 {
     internal static void AddDependencyInjection(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddCorsDependencyInjection();
+
         var postgreConnectionString = configuration.GetConnectionString("PostgreConnectionString");
 
         services.AddDbContext<HealthCheckDbContext>(options =>
@@ -15,5 +17,7 @@ internal static class DependencyInjectionHandler
             options.EnableDetailedErrors();
             options.EnableSensitiveDataLogging();
         });
+
+        services.AddRepositoriesDependencyInjection();
     }
 }
