@@ -7,7 +7,7 @@ using System.Text.Json;
 
 namespace HealthChecks.API.Infra.Publishers;
 
-public sealed class CreatedClientPublisher(ConnectionFactory factory) : ICreatedClientPublisher
+public sealed class ClientCreatedPublisher(ConnectionFactory factory) : IClientCreatedPublisher
 {
     public void PublishClientCreatedEventMessage(ClientCreatedEvent clientCreatedEvent)
     {

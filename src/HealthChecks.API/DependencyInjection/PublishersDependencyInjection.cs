@@ -7,6 +7,7 @@ public static class PublishersDependencyInjection
 {
     public static void AddPublishersDependencyInjection(this IServiceCollection services)
     {
-        services.AddScoped<ICreatedClientPublisher, CreatedClientPublisher>();
+        services.AddScoped<IClientCreatedPublisher, ClientCreatedPublisher>();
+        services.AddScoped<IClientDeletedPublisher, ClientDeletedPublisher>();
     }
 }
