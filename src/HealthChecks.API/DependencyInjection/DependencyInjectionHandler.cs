@@ -20,8 +20,10 @@ internal static class DependencyInjectionHandler
         });
 
         services.AddOptionsDependencyInjection(configuration);
+        services.AddSettingsDependencyInjection();
         MappingDependencyInjection.AddMappingDependencyInjection();
         services.AddRepositoriesDependencyInjection();
         services.AddPublishersDependencyInjection();
+        services.AddConsumersDependencyInjection();
     }
 }
