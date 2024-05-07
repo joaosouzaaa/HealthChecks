@@ -9,6 +9,6 @@ public sealed class ClientValidator : AbstractValidator<Client>
     {
         RuleFor(c => c.Name).Length(3, 200);
 
-        RuleFor(c => c.Description).Length(10, 200);
+        RuleFor(c => c.Description).Length(10, 2000);
     }
 }
