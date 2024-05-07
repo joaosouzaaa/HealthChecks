@@ -18,6 +18,8 @@ internal static class DependencyInjectionHandler
             options.EnableSensitiveDataLogging();
         });
 
+        services.AddOptionsDependencyInjection(configuration);
+        MappingDependencyInjection.AddMappingDependencyInjection();
         services.AddRepositoriesDependencyInjection();
     }
 }
