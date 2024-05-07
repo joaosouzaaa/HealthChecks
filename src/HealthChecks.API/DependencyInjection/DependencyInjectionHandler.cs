@@ -7,6 +7,7 @@ internal static class DependencyInjectionHandler
 {
     internal static void AddDependencyInjection(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddSingletonDependencyInjection(configuration);
         services.AddCorsDependencyInjection();
 
         var postgreConnectionString = configuration.GetConnectionString("PostgreConnectionString");
@@ -21,5 +22,6 @@ internal static class DependencyInjectionHandler
         services.AddOptionsDependencyInjection(configuration);
         MappingDependencyInjection.AddMappingDependencyInjection();
         services.AddRepositoriesDependencyInjection();
+        services.AddPublishersDependencyInjection();
     }
 }
