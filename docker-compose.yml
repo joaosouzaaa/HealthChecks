@@ -1,0 +1,43 @@
+version: '3.4'
+
+services:
+  rabbitmq:
+    image: "rabbitmq:3.9-management"
+    container_name: rabbitmq
+    hostname: "rabbitmq"
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+  
+  postgres:
+    image: postgres:latest
+    container_name: postgres-database
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: healthchecks
+    ports:
+      - "5432:5432"
+  
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+
+  healthchecks.api:
+    image: ${DOCKER_REGISTRY-}healthchecksapi
+    container_name: healthchecks-api
+    build:
+      context: .
+      dockerfile: src/HealthChecks.API/Dockerfile
+    ports:
+      - "5020:80"
+      - "5021:443"
+    depends_on:
+      - rabbitmq
+      - postgres
+      - mongodb
