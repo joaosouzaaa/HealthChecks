@@ -27,9 +27,8 @@
 
 	<ItemGroup>
 		<Folder Include="Controllers\" />
-		<Folder Include="Interfaces\Services\" />
-		<Folder Include="DataTransferObjects\" />
-		<Folder Include="Services\" />
+		<Folder Include="Interfaces\Mappers\" />
+		<Folder Include="Mappers\" />
 	</ItemGroup>
 
 </Project>
