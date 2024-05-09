@@ -21,7 +21,7 @@ internal sealed class ClientCreatedConsumer(ConnectionFactory factory) : Backgro
             var body = eventArgs.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
 
-            // consume message here
+            
 
             channel.BasicAck(eventArgs.DeliveryTag, false);
         };

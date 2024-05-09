@@ -7,6 +7,7 @@ internal static class ServicesDependencyInjection
 {
     internal static void AddServicesDependencyInjection(this IServiceCollection services) 
     {
+        services.AddScoped<IClientNotificationService, ClientNotificationService>();
         services.AddScoped<IClientService, ClientService>();
     }
 }

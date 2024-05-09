@@ -14,8 +14,6 @@ public sealed class ClientDeletedPublisher(ConnectionFactory factory) : IClientD
         using var connection = factory.CreateConnection();
         using var channel = connection.CreateModel();
 
-        channel.QueueDeclare(queue: QueuesConstants.ClientDeletedQueue, durable: false, exclusive: false, autoDelete: false, arguments: null);
-
         var clientDeletedEventJsonString = JsonSerializer.Serialize(clientDeletedEvent);
         var body = Encoding.UTF8.GetBytes(clientDeletedEventJsonString);
 

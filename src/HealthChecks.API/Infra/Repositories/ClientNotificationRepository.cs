@@ -21,6 +21,6 @@ public sealed class ClientNotificationRepository : IClientNotificationRepository
     public Task AddAsync(ClientNotification clientNotification) =>
         _collection.InsertOneAsync(clientNotification);
 
-    public Task<List<ClientNotification>> GetAllByClientId(long clientId) =>
+    public Task<List<ClientNotification>> GetAllByClientIdAsync(long clientId) =>
         _collection.Find(c => c.ClientId == clientId).ToListAsync();
 }
