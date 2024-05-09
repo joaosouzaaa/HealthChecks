@@ -7,5 +7,6 @@ internal static class ConsumersDependencyInjection
     internal static void AddConsumersDependencyInjection(this IServiceCollection services)
     {
         services.AddHostedService<ClientCreatedConsumer>();
+        services.AddHostedService<ClientInactivatedConsumer>();
     }
 }
