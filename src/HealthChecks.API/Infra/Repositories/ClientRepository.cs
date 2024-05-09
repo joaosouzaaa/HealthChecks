@@ -19,17 +19,14 @@ public sealed class ClientRepository(HealthCheckDbContext dbContext) : IClientRe
     public Task<bool> ExistsAsync(long id) =>
         DbContextSet.AnyAsync(c => c.Id == id);
 
-    public async Task DeleteAsync(long id)
-    {
-        var client = await DbContextSet.FindAsync(id);
+    public Task InactivateAsync(long id) =>
+        DbContextSet.Where(c => c.Id == id)
+                    .ExecuteUpdateAsync(c => c.SetProperty(c => c.IsActive, false));
 
-        DbContextSet.Remove(client!);
-
-        await dbContext.SaveChangesAsync();
-    }
-
-    public Task<List<Client>> GetAllAsync() =>
-        DbContextSet.AsNoTracking().ToListAsync();
+    public Task<List<Client>> GetAllAsync(bool? isActive) =>
+        DbContextSet.AsNoTracking()
+                    .Where(c => isActive == null || c.IsActive == isActive)
+                    .ToListAsync();
 
     public void Dispose()
     {

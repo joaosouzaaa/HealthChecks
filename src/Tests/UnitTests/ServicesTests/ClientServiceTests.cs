@@ -19,7 +19,7 @@ public sealed class ClientServiceTests
     private readonly Mock<IClientMapper> _clientMapperMock;
     private readonly Mock<IValidator<Client>> _validatorMock;
     private readonly Mock<IClientCreatedPublisher> _clientCreatedPublisherMock;
-    private readonly Mock<IClientDeletedPublisher> _clientDeletedPublisherMock;
+    private readonly Mock<IClientInactivatedPublisher > _clientInactivatedPublisherMock;
     private readonly Mock<INotificationHandler> _notificationHandlerMock;
     private readonly ClientService _clientService;
 
@@ -29,10 +29,10 @@ public sealed class ClientServiceTests
         _clientMapperMock = new Mock<IClientMapper>();
         _validatorMock = new Mock<IValidator<Client>>();
         _clientCreatedPublisherMock = new Mock<IClientCreatedPublisher>();
-        _clientDeletedPublisherMock = new Mock<IClientDeletedPublisher>();
+        _clientInactivatedPublisherMock = new Mock<IClientInactivatedPublisher>();
         _notificationHandlerMock = new Mock<INotificationHandler>();
         _clientService = new ClientService(_clientRepositoryMock.Object, _clientMapperMock.Object, _validatorMock.Object,
-            _clientCreatedPublisherMock.Object, _clientDeletedPublisherMock.Object, _notificationHandlerMock.Object);
+            _clientCreatedPublisherMock.Object, _clientInactivatedPublisherMock.Object, _notificationHandlerMock.Object);
     }
 
     [Fact]
@@ -92,7 +92,7 @@ public sealed class ClientServiceTests
     }
 
     [Fact]
-    public async Task DeleteAsync_SuccessfulScenario_ReturnsSuccessfulTask()
+    public async Task InactivateAsync_SuccessfulScenario_ReturnsSuccessfulTask()
     {
         // A
         var id = 123;
@@ -100,20 +100,20 @@ public sealed class ClientServiceTests
         _clientRepositoryMock.Setup(c => c.ExistsAsync(It.IsAny<long>()))
             .ReturnsAsync(true);
 
-        _clientRepositoryMock.Setup(c => c.DeleteAsync(It.IsAny<long>()));
-        _clientDeletedPublisherMock.Setup(c => c.PublishClientDeletedEventMessage(It.IsAny<ClientDeletedEvent>()));
+        _clientRepositoryMock.Setup(c => c.InactivateAsync(It.IsAny<long>()));
+        _clientInactivatedPublisherMock.Setup(c => c.PublishClientInactivatedEventMessage(It.IsAny<ClientInactivatedEvent>()));
 
         // A
-        await _clientService.DeleteAsync(id);
+        await _clientService.InactivateAsync(id);
 
         // A
         _notificationHandlerMock.Verify(n => n.AddNotification(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
-        _clientRepositoryMock.Verify(c => c.DeleteAsync(It.IsAny<long>()), Times.Once());
-        _clientDeletedPublisherMock.Verify(c => c.PublishClientDeletedEventMessage(It.IsAny<ClientDeletedEvent>()), Times.Once());
+        _clientRepositoryMock.Verify(c => c.InactivateAsync(It.IsAny<long>()), Times.Once());
+        _clientInactivatedPublisherMock.Verify(c => c.PublishClientInactivatedEventMessage(It.IsAny<ClientInactivatedEvent>()), Times.Once());
     }
 
     [Fact]
-    public async Task DeleteAsync_EntityDoesNotExist_ReturnsUnsuccessfulTask()
+    public async Task InactivateAsync_EntityDoesNotExist_ReturnsUnsuccessfulTask()
     {
         // A
         var id = 123;
@@ -122,12 +122,12 @@ public sealed class ClientServiceTests
             .ReturnsAsync(false);
 
         // A
-        await _clientService.DeleteAsync(id);
+        await _clientService.InactivateAsync(id);
 
         // A
         _notificationHandlerMock.Verify(n => n.AddNotification(It.IsAny<string>(), It.IsAny<string>()), Times.Once());
-        _clientRepositoryMock.Verify(c => c.DeleteAsync(It.IsAny<long>()), Times.Never());
-        _clientDeletedPublisherMock.Verify(c => c.PublishClientDeletedEventMessage(It.IsAny<ClientDeletedEvent>()), Times.Never());
+        _clientRepositoryMock.Verify(c => c.InactivateAsync(It.IsAny<long>()), Times.Never());
+        _clientInactivatedPublisherMock.Verify(c => c.PublishClientInactivatedEventMessage(It.IsAny<ClientInactivatedEvent>()), Times.Never());
     }
 
     [Fact]
@@ -140,7 +140,7 @@ public sealed class ClientServiceTests
             ClientBuilder.NewObject().DomainBuild(),
             ClientBuilder.NewObject().DomainBuild()
         };
-        _clientRepositoryMock.Setup(c => c.GetAllAsync())
+        _clientRepositoryMock.Setup(c => c.GetAllAsync(null))
             .ReturnsAsync(clientList);
 
         var clientResponseList = new List<ClientResponse>()
@@ -151,7 +151,7 @@ public sealed class ClientServiceTests
             .Returns(clientResponseList);
 
         // A
-        var clientResponseListResult = await _clientService.GetAllAsync();
+        var clientResponseListResult = await _clientService.GetAllAsync(null);
 
         // A
         Assert.Equal(clientResponseListResult.Count, clientResponseList.Count);

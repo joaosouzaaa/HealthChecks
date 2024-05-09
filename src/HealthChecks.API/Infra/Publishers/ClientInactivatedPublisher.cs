@@ -7,16 +7,16 @@ using System.Text.Json;
 
 namespace HealthChecks.API.Infra.Publishers;
 
-public sealed class ClientDeletedPublisher(ConnectionFactory factory) : IClientDeletedPublisher
+public sealed class ClientInactivatedPublisher(ConnectionFactory factory) : IClientInactivatedPublisher
 {
-    public void PublishClientDeletedEventMessage(ClientDeletedEvent clientDeletedEvent)
+    public void PublishClientInactivatedEventMessage(ClientInactivatedEvent clientInactivatedEvent)
     {
         using var connection = factory.CreateConnection();
         using var channel = connection.CreateModel();
 
-        var clientDeletedEventJsonString = JsonSerializer.Serialize(clientDeletedEvent);
+        var clientDeletedEventJsonString = JsonSerializer.Serialize(clientInactivatedEvent);
         var body = Encoding.UTF8.GetBytes(clientDeletedEventJsonString);
 
-        channel.BasicPublish(exchange: "", routingKey: QueuesConstants.ClientDeletedQueue, basicProperties: null, body: body);
+        channel.BasicPublish(exchange: "", routingKey: QueuesConstants.ClientInactivatedQueue, basicProperties: null, body: body);
     }
 }

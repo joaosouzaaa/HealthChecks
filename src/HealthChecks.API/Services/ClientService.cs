@@ -15,7 +15,7 @@ public sealed class ClientService(
     IClientMapper clientMapper,
     IValidator<Client> validator,
     IClientCreatedPublisher clientCreatedPublisher,
-    IClientDeletedPublisher clientDeletedPublisher,
+    IClientInactivatedPublisher clientInactivatedPublisher,
     INotificationHandler notificationHandler)
     : IClientService
 {
@@ -34,7 +34,7 @@ public sealed class ClientService(
         clientCreatedPublisher.PublishClientCreatedEventMessage(clientCreatedEvent);
     }
 
-    public async Task DeleteAsync(long id)
+    public async Task InactivateAsync(long id)
     {
         if(!await clientRepository.ExistsAsync(id))
         {
@@ -43,15 +43,15 @@ public sealed class ClientService(
             return;
         }
 
-        await clientRepository.DeleteAsync(id);
+        await clientRepository.InactivateAsync(id);
 
-        var clientDeletedEvent = new ClientDeletedEvent(id);
-        clientDeletedPublisher.PublishClientDeletedEventMessage(clientDeletedEvent);
+        var clientInactivatedEvent = new ClientInactivatedEvent(id);
+        clientInactivatedPublisher.PublishClientInactivatedEventMessage(clientInactivatedEvent);
     }
 
-    public async Task<List<ClientResponse>> GetAllAsync()
+    public async Task<List<ClientResponse>> GetAllAsync(bool? isActive)
     {
-        var clientList = await clientRepository.GetAllAsync();
+        var clientList = await clientRepository.GetAllAsync(isActive);
 
         return clientMapper.DomainListToResponseList(clientList);
     }
