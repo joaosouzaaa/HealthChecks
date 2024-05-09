@@ -6,6 +6,6 @@ public interface IClientRepository
 {
     Task AddAsync(Client client);
     Task<bool> ExistsAsync(long id);
-    Task DeleteAsync(long id);
-    Task<List<Client>> GetAllAsync();
+    Task InactivateAsync(long id);
+    Task<List<Client>> GetAllAsync(bool? isActive);
 }

@@ -9,7 +9,7 @@ using System.Text.Json;
 
 namespace HealthChecks.API.Infra.Consumers;
 
-internal sealed class ClientCreatedConsumer(
+internal sealed class ClientInactivatedConsumer(
     ConnectionFactory factory,
     IServiceScopeFactory serviceScopeFactory)
     : BackgroundService
@@ -19,7 +19,7 @@ internal sealed class ClientCreatedConsumer(
         var connection = factory.CreateConnection();
         var channel = connection.CreateModel();
 
-        channel.QueueDeclare(queue: QueuesConstants.ClientCreatedQueue, durable: false, exclusive: false, autoDelete: false, arguments: null);
+        channel.QueueDeclare(queue: QueuesConstants.ClientInactivatedQueue, durable: false, exclusive: false, autoDelete: false, arguments: null);
 
         var consumer = new EventingBasicConsumer(channel);
 
@@ -31,7 +31,7 @@ internal sealed class ClientCreatedConsumer(
         };
 
         channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
-        channel.BasicConsume(queue: QueuesConstants.ClientCreatedQueue, consumer: consumer);
+        channel.BasicConsume(queue: QueuesConstants.ClientInactivatedQueue, consumer: consumer);
 
         return Task.CompletedTask;
     }
@@ -40,7 +40,7 @@ internal sealed class ClientCreatedConsumer(
     {
         var body = eventArgs.Body.ToArray();
         var message = Encoding.UTF8.GetString(body);
-        var clientCreatedEvent = JsonSerializer.Deserialize<ClientCreatedEvent>(message)!;
+        var clientInactivatedEvent = JsonSerializer.Deserialize<ClientInactivatedEvent>(message)!;
 
         using var scope = serviceScopeFactory.CreateScope();
         var clientNotificationRepository = scope.ServiceProvider.GetRequiredService<IClientNotificationRepository>();
@@ -48,10 +48,10 @@ internal sealed class ClientCreatedConsumer(
         await clientNotificationRepository.AddAsync(
             new ClientNotification()
             {
-                ClientId = clientCreatedEvent.ClientId,
+                ClientId = clientInactivatedEvent.ClientId,
                 Id = Guid.NewGuid(),
-                Key = "Client Created",
-                Message = $"The client {clientCreatedEvent.Name} was created."
+                Key = "Client Inactivated",
+                Message = $"The client with Id: {clientInactivatedEvent.ClientId} was inactivated."
             });
     }
 }

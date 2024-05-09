@@ -14,8 +14,6 @@ public sealed class ClientCreatedPublisher(ConnectionFactory factory) : IClientC
         using var connection = factory.CreateConnection();
         using var channel = connection.CreateModel();
 
-        channel.QueueDeclare(queue: QueuesConstants.ClientCreatedQueue, durable: false, exclusive: false, autoDelete: false, arguments: null);
-
         var clientCreatedEventJsonString = JsonSerializer.Serialize(clientCreatedEvent);
         var body = Encoding.UTF8.GetBytes(clientCreatedEventJsonString);
 
