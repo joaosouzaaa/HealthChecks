@@ -17,8 +17,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
 app.UseCors(CorsPoliciesNamesConstants.CorsPolicy);
+app.UseHealthChecksDependencyInjection();
 app.UseAuthorization();
 app.MapControllers();
 app.MigrateDatabase();
