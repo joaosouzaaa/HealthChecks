@@ -27,6 +27,6 @@ public sealed class ClientController(IClientService clientService) : ControllerB
     [HttpGet("get-all")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ClientResponse>))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public Task GetAllAsync([FromQuery] bool? isActive) =>
+    public Task<List<ClientResponse>> GetAllAsync([FromQuery] bool? isActive) =>
         clientService.GetAllAsync(isActive);
 }
