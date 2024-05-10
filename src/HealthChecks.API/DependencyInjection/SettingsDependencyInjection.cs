@@ -2,6 +2,7 @@
 using HealthChecks.API.Filters;
 using HealthChecks.API.Interfaces.Settings;
 using HealthChecks.API.Settings.NotificationSettings;
+using System.Reflection;
 
 namespace HealthChecks.API.DependencyInjection;
 
@@ -15,6 +16,6 @@ internal static class SettingsDependencyInjection
 
         services.AddMvc(options => options.Filters.AddService<NotificationFilter>());
 
-        services.AddValidatorsFromAssembly(AssemblyReference.Assembly);
+        services.AddValidatorsFromAssembly(Assembly.GetCallingAssembly());
     }
 }
