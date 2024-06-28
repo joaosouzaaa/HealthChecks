@@ -15,18 +15,18 @@
 		<PackageReference Include="AspNetCore.HealthChecks.Npgsql" Version="8.0.1" />
 		<PackageReference Include="AspNetCore.HealthChecks.RabbitMQ" Version="8.0.1" />
 		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.1" />
-		<PackageReference Include="FluentValidation" Version="11.9.1" />
-		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4">
+		<PackageReference Include="FluentValidation" Version="11.9.2" />
+		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.6">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
-		<PackageReference Include="MongoDB.Bson" Version="2.25.0" />
-		<PackageReference Include="MongoDB.Driver" Version="2.25.0" />
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
+		<PackageReference Include="MongoDB.Bson" Version="2.27.0" />
+		<PackageReference Include="MongoDB.Driver" Version="2.27.0" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
 		<PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
 	</ItemGroup>
 
 </Project>
